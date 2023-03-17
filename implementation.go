@@ -6,8 +6,10 @@ import (
 	"strings"
 )
 
+// Type Stack is a stack of strings used for postfix to prefix conversion.
 type Stack []string
 
+// PostfixToPrefix converts a postfix expression to prefix notation.
 func PostfixToPrefix(postfix string) (string, error) {
 	stack := Stack{}
 	tokens := strings.Split(postfix, " ")
@@ -36,6 +38,8 @@ func PostfixToPrefix(postfix string) (string, error) {
 	return result, nil
 }
 
+// isOperator returns true if the given token is a supported operator.
+// The supported operators are: +, -, *, /, and ^.
 func isOperator(token string) bool {
 	switch token {
 	case "+", "-", "*", "/", "^":
@@ -44,10 +48,12 @@ func isOperator(token string) bool {
 	return false
 }
 
+// push adds a new string onto the top of the stack.
 func (s *Stack) push(str string) {
 	*s = append(*s, str)
 }
 
+// pop removes and returns the string from the top of the stack.
 func (s *Stack) pop() (string, error) {
 	n := len(*s) - 1
 	if n < 0 {
