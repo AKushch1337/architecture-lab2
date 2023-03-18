@@ -3,25 +3,64 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
+	"os"
+	"strings"
+
 	lab2 "github.com/AKushch1337/architecture-lab2"
 )
 
 var (
 	inputExpression = flag.String("e", "", "Expression to compute")
-	// TODO: Add other flags support for input and output configuration.
+	readFile        = flag.String("f", "", "File that contains the input expression")
+	writeFile       = flag.String("o", "", "File that will contain the result")
 )
 
 func main() {
 	flag.Parse()
 
-	// TODO: Change this to accept input from the command line arguments as described in the task and
-	//       output the results using the ComputeHandler instance.
-	//       handler := &lab2.ComputeHandler{
-	//           Input: {construct io.Reader according the command line parameters},
-	//           Output: {construct io.Writer according the command line parameters},
-	//       }
-	//       err := handler.Compute()
+	if *inputExpression == "" && *readFile == "" {
+		fmt.Fprintf(os.Stderr, "Either input expression or input file must be provided\n")
+		os.Exit(1)
+	}
 
-	res, _ := lab2.PostfixToPrefix("+ 2 2")
-	fmt.Println(res)
+	if *inputExpression != "" && *readFile != "" {
+		fmt.Fprintf(os.Stderr, "Cannot provide both input expression and input file\n")
+		os.Exit(1)
+	}
+
+	var reader io.Reader
+	if *inputExpression != "" {
+		reader = strings.NewReader(*inputExpression)
+	} else {
+		file, err := os.Open(*readFile)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to open input file: %s\n", err)
+			os.Exit(1)
+		}
+		defer file.Close()
+		reader = file
+	}
+
+	var writer io.Writer
+	if *writeFile != "" {
+		file, err := os.Create(*writeFile)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to create output file: %s\n", err)
+			os.Exit(1)
+		}
+		defer file.Close()
+		writer = file
+	} else {
+		writer = os.Stdout
+	}
+
+	handler := &lab2.ComputeHandler{Input: reader, Output: writer}
+
+	err := handler.Compute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to compute expression: %s\n", err)
+		os.Exit(1)
+	}
+
 }
