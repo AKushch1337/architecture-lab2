@@ -11,31 +11,30 @@ type Stack []string
 
 // PostfixToPrefix converts a postfix expression to prefix notation.
 func PostfixToPrefix(postfix string) (string, error) {
+	if len(postfix) == 0 {
+		return "", errors.New("expression is invalid")
+	}
 	stack := Stack{}
 	tokens := strings.Split(postfix, " ")
 	for _, token := range tokens {
-		if IsOperator(token) {
+		switch {
+		case IsOperator(token):
 			operand2, err := stack.Pop()
-			if err != nil {
-				return "", errors.New("not enough operands for operator")
-			}
 			operand1, err := stack.Pop()
 			if err != nil {
 				return "", errors.New("not enough operands for operator")
 			}
 			stack.Push(fmt.Sprintf("%s %s %s", token, operand1, operand2))
-		} else {
+		default:
 			stack.Push(token)
 		}
 	}
 	result, err := stack.Pop()
-	if err != nil {
-		return "", errors.New("expression is invalid")
-	}
-	if len(stack) > 0 {
+	if err != nil || len(stack) > 0 {
 		return "", errors.New("expression is invalid")
 	}
 	return result, nil
+
 }
 
 // IsOperator returns true if the given token is a supported operator.
@@ -44,8 +43,9 @@ func IsOperator(token string) bool {
 	switch token {
 	case "+", "-", "*", "/", "^":
 		return true
+	default:
+		return false
 	}
-	return false
 }
 
 // Push adds a new string onto the top of the stack.
