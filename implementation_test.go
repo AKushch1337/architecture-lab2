@@ -63,6 +63,12 @@ func TestPostfixToPrefix(t *testing.T) {
 			prefix:  "",
 			err:     errors.New("expression is invalid"),
 		},
+		{
+			name:    "invalid expression with blank input",
+			postfix: "",
+			prefix:  "",
+			err:     errors.New("expression is invalid"),
+		},
 	}
 
 	for _, test := range tests {
