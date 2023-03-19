@@ -1,4 +1,10 @@
-Шаблон для 2-гої роботи з архітектури ПЗ
+# Architecture lab 2
+
+## Postfix to prefix converter
 ---
 
-Використайте кнопку **"Use this template"**, щоб створити власний репозиторій.
+[Link](https://github.com/AKushch1337/architecture-lab2/actions/runs/4448728552) to failed Github actions build
+
+[Link](https://github.com/AKushch1337/architecture-lab2/actions/runs/4449105461) to succesful Github actions build
+
+[Link](https://github.com/AKushch1337/architecture-lab2/actions/runs/4457687420) to pull request on which Github actions build was invocated
