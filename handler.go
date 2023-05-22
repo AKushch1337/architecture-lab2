@@ -13,8 +13,8 @@ type ComputeHandler struct {
 
 // The Compute function reads and computes an expression, then writes the result to the output writer.
 func (ch *ComputeHandler) Compute() error {
-	inputBuffer := make([]byte, 256)
-	_, err := ch.Input.Read(inputBuffer)
+	inputBuffer, err := io.ReadAll(ch.Input)
+
 	if err != nil {
 		return err
 	}
